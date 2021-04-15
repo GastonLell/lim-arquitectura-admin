@@ -13,6 +13,6 @@ export const signIn = ({email, password}) => {
         })
         .catch(e => {
           console.log(e)
-          window.location="http://localhost:3000/"
+          window.location="https://lim-arquitectura-admin.web.app"
         } )
 }
