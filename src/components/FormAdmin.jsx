@@ -18,30 +18,35 @@ const FormAdmin = () => {
     
     e.preventDefault();
 
-    let idImagen;
-    
+    let imageDownloadUrl;
+
     const user = firebase.auth().currentUser;
     if(user == null){
       alert("debe estar registrado para realizar el post")
       return
     }
+    if(!!post.file){
+      const refStorage = await firebase.storage().ref(`proyectos/${post.file.name}`)
 
+      await refStorage.put(post.file).then(() => console.log("imagen en storage"))
+      .catch(err => console.log(err))
+
+      await refStorage.getDownloadURL().then(url => {
+        imageDownloadUrl = url;
+      })
+    }
     await db.collection('proyectos').add({
       nombre: post.nombre,
       categoria: post.categoria,
-      srcImagen: post.file.name,
+      srcImagen: imageDownloadUrl,
       fecha: firebase.firestore.FieldValue.serverTimestamp()
     })
     .then(refDoc => {
       console.log(refDoc.id)
-      idImagen = refDoc.id;
     })
     .catch(err => console.log(`error al enviar documentos a firebase ${err}`))
 
-    const refStorage = await firebase.storage().ref(`proyectos/${idImagen}/${post.file.name}`)
-     await refStorage.put(post.file).then(
-      snapshot => console.log(snapshot)
-    )
+
   }
 
   const handleChangue = (e) => {
