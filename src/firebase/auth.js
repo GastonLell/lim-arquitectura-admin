@@ -1,9 +1,23 @@
-import firebase from "firebase/app"
-import "firebase/auth";
-import {getFirebase} from "./client"
+import {useEffect, useState, createContext} from "react";
 
-const firebaseApp = getFirebase()
+import app from "./client";
 
+export const AuthContext = createContext();
+
+export const AuthProvider = ({children}) => {
+    const [currentUser, setCurrentUser] = useState(null);
+
+    useEffect(() => {
+        app.auth().onAuthStateChanged(setCurrentUser);
+    }, []);
+
+    return(
+        <AuthContext.Provider value={{currentUser}}>
+            {children}
+        </AuthContext.Provider>
+    )
+}
+/* 
 export const signIn = ({email, password}) => {
     firebase.auth().signInWithEmailAndPassword(email, password)
         .then(res => {
@@ -16,3 +30,4 @@ export const signIn = ({email, password}) => {
           window.location="https://lim-arquitectura-admin.web.app"
         } )
 }
+ */

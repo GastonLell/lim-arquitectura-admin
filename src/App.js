@@ -1,18 +1,21 @@
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import {AuthProvider} from "./firebase/auth";
 import './App.css';
+import PrivateRoute from "./components/PrivateRoute";
 import Inicio from "./pages/Inicio"; 
-import SignIn from "./pages/SignIn";
+import Login from "./pages/Login";
 import Admin from "./pages/Admin";
+
 function App() {
   return (
     <div className="App">
+      <AuthProvider>
       <Router>
-        <Switch>
           <Route exact path="/" component={Inicio} />
-          <Route exact path="/signIn" component={SignIn} />
-          <Route exact path="/admin" component={Admin} />
-        </Switch>
+          <Route exact path="/login" component={Login} />
+          <PrivateRoute exact path="/admin" component={Admin} />
       </Router>
+      </AuthProvider>
     </div>
   );
 }
