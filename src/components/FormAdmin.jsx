@@ -24,7 +24,7 @@ const FormAdmin = () => {
     try {
       let imageDownloadUrl;
 
-      const refStorage = await firebase.storage().ref(`proyectos/${file.files[0].name}`);
+      const refStorage = await firebase.storage().ref(`${file.files[0].name}`);
 
       if (!!file) {
         const task = refStorage.put(file.files[0]);
