@@ -17,17 +17,3 @@ export const AuthProvider = ({children}) => {
         </AuthContext.Provider>
     )
 }
-/* 
-export const signIn = ({email, password}) => {
-    firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(res => {
-            if (res.user) {
-                console.log("adentroooo")
-            }
-        })
-        .catch(e => {
-          console.log(e)
-          window.location="https://lim-arquitectura-admin.web.app"
-        } )
-}
- */

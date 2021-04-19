@@ -10,10 +10,10 @@ const Admin = () => {
                     <h2 className="p-5">Administración de contenidos</h2>
                 </Col>
             </Row>
-            <Row>
+            <Row xs={2} className="justify-content-center">
                 <FormAdmin/>
             </Row>
-            <Row>
+            <Row className="justify-content-end p-5">
                 <Button onClick={() => app.auth().signOut()} variant="danger">Salir</Button>
             </Row>
         </Container>

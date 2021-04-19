@@ -1,28 +1,42 @@
+// dependencias react
 import { useCallback, useContext } from "react";
 import { Redirect } from "react-router";
+
+//firebase
 import app from "../firebase/client";
 import { AuthContext } from "../firebase/auth";
 
+//bootstrap
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
 const Login = ({ history }) => {
+  const { currentUser } = useContext(AuthContext);
+
+
   const handleLogin = useCallback(
+
     async (event) => {
+
       event.preventDefault();
+
       const { email, password } = event.target.elements;
+
       try {
+
         await app
           .auth()
           .signInWithEmailAndPassword(email.value, password.value);
+
         history.push("/admin");
+
       } catch (error) {
+
         alert(error);
+
       }
     },
     [history]
   );
-
-  const { currentUser } = useContext(AuthContext);
 
   if (currentUser) {
     return <Redirect to="/admin" />;

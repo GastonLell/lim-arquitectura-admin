@@ -1,7 +1,11 @@
+//REACT
 import { useContext } from "react";
 import { Link, Redirect } from "react-router-dom";
+
+//CONTEXT AUTH
 import { AuthContext } from "../firebase/auth";
 
+//BOOTSTRAP
 import { Container, Row, Col } from "react-bootstrap";
 
 const Inicio = () => {
