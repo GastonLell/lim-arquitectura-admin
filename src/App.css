@@ -37,3 +37,15 @@
   width: 100%;
   overflow: hidden;
 }
+#mensajeria .btn-msj{
+  border: none;
+  width: 100%;
+  background-color: transparent;
+}
+#mensajeria .btn-msj:hover{
+  color: black;
+}
+#mensajeria .respuesta-email:hover{
+  text-decoration: none;
+  color: #fff;
+}
