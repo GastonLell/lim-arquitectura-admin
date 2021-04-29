@@ -22,7 +22,7 @@ const FormAdmin = () => {
     const { nombre, categoria, file } = event.target.elements;
 
     try {
-      let imageDownloadUrl;
+      let imagenUrl;
 
       const refStorage = await firebase.storage().ref(`${file.files[0].name}`);
 
@@ -30,34 +30,34 @@ const FormAdmin = () => {
         const task = refStorage.put(file.files[0]);
 
         task.on("state_changed", (snapshot) => {
-            let porcentajeActual = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          let porcentajeActual = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             setProgress({
               ...progress,
               porcentaje: porcentajeActual,
             });
-          }, (error) => {
+        }, (error) => {
             setProgress({
               ...progress,
               mensaje: "error al cargar imagen. Por favor, intentelo nuevamente",
             });
-          }, () => {
-            setProgress({
-              ...progress,
-              mensaje: "Imagen cargada",
-            })
-          });
-      }
-
-      await refStorage.getDownloadURL().then((url) => {
-        imageDownloadUrl = url;
+        }, () => {
+          setProgress({
+            ...progress,
+            mensaje: "Imagen cargada",
+          })
       });
 
-      await db
-        .collection("proyectos")
-        .add({
+      await task.then(data => {
+        data.ref.getDownloadURL().then(url => {
+          imagenUrl = url
+        })
+      })
+    }
+
+      await db.collection("proyectos").add({
           nombre: nombre.value,
           categoria: categoria.value,
-          srcImagen: imageDownloadUrl,
+          srcImagen: imagenUrl,
           fecha: firebase.firestore.FieldValue.serverTimestamp(),
         })
         .then((refDoc) => {
@@ -68,7 +68,7 @@ const FormAdmin = () => {
         );
       
     } catch (error) {
-      alert(error)
+      console.log(error)
     }
 
   }, [progress]);
@@ -103,7 +103,6 @@ const FormAdmin = () => {
               <option selected>Seleccione categoria</option>
               <option value="renders">Renders</option>
               <option value="videos">Videos</option>
-              <option value="realidad">Realidad Virtual</option>
             </Form.Control>
           </Form.Group>
           <Form.Group>
