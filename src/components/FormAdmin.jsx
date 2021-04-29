@@ -4,29 +4,26 @@ import { useState, useCallback } from "react";
 //FIREBASE
 import firebase from "firebase";
 import { getFirestore } from "../firebase/client";
+import {getProject} from '../firebase/getProject';
 
 //BOOTSTRAP
 import { Form, Row, Col, Button, Alert, ProgressBar } from "react-bootstrap";
 
 const FormAdmin = () => {
+
   const [progress, setProgress] = useState({
     mensaje: "",
     porcentaje: null,
   });
 
-  const handlePost = useCallback(async (event) => {
+  const handlePost = async (event) => {
     event.preventDefault();
-
-    const db = getFirestore();
 
     const { nombre, categoria, file } = event.target.elements;
 
-    try {
-      let imagenUrl;
+      
+        const refStorage = await firebase.storage().ref(`${file.files[0].name}`);
 
-      const refStorage = await firebase.storage().ref(`${file.files[0].name}`);
-
-      if (!!file) {
         const task = refStorage.put(file.files[0]);
 
         task.on("state_changed", (snapshot) => {
@@ -49,29 +46,12 @@ const FormAdmin = () => {
 
       await task.then(data => {
         data.ref.getDownloadURL().then(url => {
-          imagenUrl = url
+          let imagenUrl = url;
+          getProject({nombre, categoria, imagenUrl})
         })
       })
-    }
 
-      await db.collection("proyectos").add({
-          nombre: nombre.value,
-          categoria: categoria.value,
-          srcImagen: imagenUrl,
-          fecha: firebase.firestore.FieldValue.serverTimestamp(),
-        })
-        .then((refDoc) => {
-          console.log(refDoc.id);
-        })
-        .catch((err) =>
-          console.log(`error al enviar documentos a firebase ${err}`)
-        );
-      
-    } catch (error) {
-      console.log(error)
-    }
-
-  }, [progress]);
+  }
 
   const handleResetForm = () => {
     document.getElementById("formAdmin").reset();
