@@ -13,7 +13,6 @@ const Mensajeria = () => {
   const traerUnMensaje = (id) => {
     let msj = mensajesDB.find((item) => item.id === id);
     setMensaje(msj);
-    
   };
 
   const obtenerFecha = (data) => new Date(data * 1000)
@@ -61,7 +60,7 @@ const Mensajeria = () => {
               <br/><br/>
 
               <h3>Emisor:</h3>
-              <span>{mensaje.data.nombre} </span> | | <span>{mensaje.data.email}</span>
+              <span>{mensaje?.data?.nombre} </span> | | <span>{mensaje?.data?.email}</span>
               <br/><br/>
               
               <h3>Mensaje:</h3>
@@ -70,10 +69,10 @@ const Mensajeria = () => {
               </p>
               <br/><br/>
 
-              <Button>
-                <a className="respuesta-email"
-                  href={`mailto:${mensaje.data.email}?Subject=Respuesta%20LIM%20Arquitectura`}
-                  target="__blank"> Responder
+              <Button className="respuesta-email">
+                <a
+                  href={`mailto:${mensaje?.data?.email}?Subject=Respuesta%20LIM%20Arquitectura`}
+                  target="__blank">Responder
                 </a>
               </Button>
 

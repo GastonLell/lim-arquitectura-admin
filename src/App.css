@@ -45,7 +45,14 @@
 #mensajeria .btn-msj:hover{
   color: black;
 }
-#mensajeria .respuesta-email:hover{
+#mensajeria .respuesta-email{
+  color: black;
+}
+#mensajeria .respuesta-email a{
+  color: #fff;
   text-decoration: none;
+}
+#mensajeria .respuesta-email:hover{
+  opacity: 0.8;
   color: #fff;
 }
