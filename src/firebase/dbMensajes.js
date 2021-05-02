@@ -11,7 +11,7 @@ export const MensajesProvider = ({children}) => {
     const [mensajes, setMensajes] = useState([]);
 
     const traerMensajes = () => {
-        const docRef = db.collection('mensajes')
+        let docRef = db.collection('mensajes').orderBy("fecha", "desc")
 
         docRef.get().then((result) => {
 
@@ -36,4 +36,16 @@ export const MensajesProvider = ({children}) => {
             {children}
         </MensajeriaContext.Provider>
     )
+}
+
+export const mensajeLeido = ({id}) => {
+
+    let docRef = db.collection('mensajes').doc(id);
+
+    return docRef.update({
+        leido: true
+    })
+    .then(() => console.log("mensaje leido"))
+    .catch(err => console.log(err))
+    
 }

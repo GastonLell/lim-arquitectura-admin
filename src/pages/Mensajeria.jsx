@@ -1,7 +1,11 @@
-import { useContext, useEffect, useState } from "react";
-import {Link} from "react-router-dom";
-import { MensajeriaContext } from "../firebase/dbMensajes";
+import app from "../firebase/client";
 
+import { useContext, useEffect, useState } from "react";
+import { MensajeriaContext, mensajeLeido } from "../firebase/dbMensajes";
+
+import {Link} from "react-router-dom";
+
+import {FiEdit, FiLogOut, FiCheckCircle} from 'react-icons/fi';
 import { Container, Row, Col, Toast, ToastBody, Button } from "react-bootstrap";
 
 const Mensajeria = () => {
@@ -11,6 +15,7 @@ const Mensajeria = () => {
   const [mensaje, setMensaje] = useState();
 
   const traerUnMensaje = (id) => {
+    mensajeLeido({id})
     let msj = mensajesDB.find((item) => item.id === id);
     setMensaje(msj);
   };
@@ -22,7 +27,11 @@ const Mensajeria = () => {
   }, [mensajes]);
 
   return (
-    <Container id="mensajeria" className="py-4">
+    <Container id="mensajeria">
+      <Row className="justify-content-end my-2 mx-0" >
+        <Link to="/admin" className="px-2"><Button><FiEdit/></Button></Link>
+        <Button onClick={() => app.auth().signOut()} variant="danger"><FiLogOut/></Button>
+      </Row>
 
       <h2 className="py-3">Mensajería</h2>
 
@@ -34,17 +43,14 @@ const Mensajeria = () => {
               return (
                 <Button className="btn-msj" variant="outline-dark" onClick={() => traerUnMensaje(item.id)}>
                   <Toast>
-                    <Toast.Header>
-                      <img
-                        src="holder.js/20x20?text=%20"
-                        className="rounded mr-2"
-                        alt=""
-                      />
+                    <Toast.Header closeButton={false} >
                       <strong className="mr-auto">{item.data.nombre}</strong>
                       <small>
                         {fechaConvert.toLocaleDateString("es-ES")}
-
                       </small>
+                      {
+                        item.data.leido && <FiCheckCircle className="mx-2" style={{"color": "green"}} />
+                      }
                     </Toast.Header>
                     <Toast.Body>{item.data.email} </Toast.Body>
                   </Toast>

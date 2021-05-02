@@ -1,9 +1,8 @@
 //REACT
-import { useState, useCallback } from "react";
+import { useState } from "react";
 
 //FIREBASE
 import firebase from "firebase";
-import { getFirestore } from "../firebase/client";
 import {getProject} from '../firebase/getProject';
 
 //BOOTSTRAP
@@ -21,27 +20,26 @@ const FormAdmin = () => {
 
     const { nombre, categoria, file } = event.target.elements;
 
-      
-        const refStorage = await firebase.storage().ref(`${file.files[0].name}`);
+      const refStorage = await firebase.storage().ref(`${file.files[0].name}`);
 
-        const task = refStorage.put(file.files[0]);
+      const task = refStorage.put(file.files[0]);
 
-        task.on("state_changed", (snapshot) => {
-          let porcentajeActual = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setProgress({
-              ...progress,
-              porcentaje: porcentajeActual,
-            });
-        }, (error) => {
-            setProgress({
-              ...progress,
-              mensaje: "error al cargar imagen. Por favor, intentelo nuevamente",
-            });
-        }, () => {
+      task.on("state_changed", (snapshot) => {
+        let porcentajeActual = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           setProgress({
             ...progress,
-            mensaje: "Imagen cargada",
-          })
+            porcentaje: porcentajeActual,
+          });
+      }, (error) => {
+          setProgress({
+            ...progress,
+            mensaje: "error al cargar imagen. Por favor, intentelo nuevamente",
+          });
+      }, () => {
+        setProgress({
+          ...progress,
+          mensaje: "Imagen cargada",
+        })
       });
 
       await task.then(data => {
@@ -65,7 +63,7 @@ const FormAdmin = () => {
       <Col>
       {
         progress.porcentaje > 0 && (
-          <ProgressBar now={progress.porcentaje} striped variant="dark" label={`${progress.porcentaje}%`} />
+          <ProgressBar now={progress.porcentaje} striped variant="dark" label={`${Math.floor(progress.porcentaje)}%`} />
         )
       }
         <Form id="formAdmin" onSubmit={handlePost}>
