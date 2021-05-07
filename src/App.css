@@ -1,5 +1,7 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
-
+html{
+  overflow: hidden;
+}
 .App {
   text-align: center;
 }
@@ -30,9 +32,8 @@
   }
 }
 #mensajeria .mensajes{
-  max-height: 70vh;
+  max-height: auto;
 }
-
 #mensajeria .toast-mensaje{
   width: 100%;
   overflow: hidden;
